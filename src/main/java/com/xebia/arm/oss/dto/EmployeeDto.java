@@ -23,6 +23,8 @@ public class EmployeeDto {
 
 	private int empId;
 
+	private double salary;
+
 	/*
 	 * public static void test1() { private List<EmployeeDto> empList = new
 	 * ArrayList<>(); EmployeeDto obj1 = new EmployeeDto();
@@ -104,6 +106,14 @@ public class EmployeeDto {
 
 	public void setEmpId(int empId) {
 		this.empId = empId;
+	}
+
+	public double getSalary() {
+		return salary;
+	}
+
+	public void setSalary(double salary) {
+		this.salary = salary;
 	}
 
 }
