@@ -2,6 +2,7 @@ package com.xebia.arm.oss.employee;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,4 +61,25 @@ public class EmployeeController {
 		return empService.getEmployeeDetailsByPlantId(request);
 	}
 
+	@DeleteMapping(value = "/deleteEmployeeRecord/{empId}")
+	public EmployeeResponse deleteEmployeeRecord(@PathVariable("empId") int empId) {
+		return empService.deleteEmployeeRecord(empId);
+	}
+
+	@DeleteMapping(value = "/deleteEmployeeRecordWithCreateNativeQuery/{empId}")
+	public EmployeeResponse deleteEmployeeRecordWithCreateNativeQuery(@PathVariable("empId") int empId) {
+		return empService.deleteEmployeeRecordWithCreateNativeQuery(empId);
+	}
+
+	@DeleteMapping(value = "/deleteEmployeeRecordWithCreateQuery/{empId}")
+	public EmployeeResponse deleteEmployeeRecordWithCreateQuery(@PathVariable("empId") int empId) {
+		return empService.deleteEmployeeRecordWithCreateQuery(empId);
+
+	}
+
+	@PostMapping(value = "/deleteMultipleEmployeeRecords")
+	public EmployeeResponse deleteMultipleEmployeeRecords(@RequestBody EmployeeDto request) {
+		return empService.deleteMultipleEmployeeRecords(request);
+
+	}
 }

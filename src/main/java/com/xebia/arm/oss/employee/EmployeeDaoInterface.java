@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.xebia.arm.oss.dto.EmployeeDto;
 import com.xebia.arm.oss.model.EmployeeDetails;
+import com.xebia.arm.oss.response.EmployeeResponse;
 
 public interface EmployeeDaoInterface {
 
@@ -20,4 +21,12 @@ public interface EmployeeDaoInterface {
 	public List<EmployeeDto> getEmployeeDetails(EmployeeDto request);
 
 	public List<EmployeeDto> getEmployeeDetailsByPlantId(EmployeeDto request);
+
+	public boolean deleteEmployeeRecord(int empId);
+
+	public boolean deleteEmployeeRecordWithCreateNativeQuery(int empId);
+
+	public boolean deleteEmployeeRecordWithCreateQuery(int empId);
+
+	public boolean deleteMultipleEmployeeRecords(EmployeeDto request);
 }

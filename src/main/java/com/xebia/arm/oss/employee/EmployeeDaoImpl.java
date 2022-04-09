@@ -180,4 +180,67 @@ public class EmployeeDaoImpl extends BaseRepository implements EmployeeDaoInterf
 		return dtoList;
 	}
 
+	@Override
+	public boolean deleteEmployeeRecord(int empId) {
+		Session session = getCurrentSession();
+		boolean flag = false;
+		// Entity - Employee Details
+
+		EmployeeDetails ed = session.load(EmployeeDetails.class, empId);
+		if (ed != null) {
+			session.delete(ed);
+			flag = true;
+		}
+
+		return flag;
+	}
+
+	@Override
+	public boolean deleteEmployeeRecordWithCreateNativeQuery(int empId) {
+		Session session = getCurrentSession();
+		boolean flag = false;
+		// Entity - Employee Details
+
+		int rowsAffected = session.createNativeQuery("delete from employee_details where emp_id=:empId")
+				.setParameter("empId", empId).executeUpdate();
+
+		if (rowsAffected > 0) {
+			flag = true;
+		}
+
+		return flag;
+	}
+
+	@Override
+	public boolean deleteEmployeeRecordWithCreateQuery(int empId) {
+		Session session = getCurrentSession();
+		boolean flag = false;
+
+		int roes = session.createQuery("FROM EmployeeDetails where empId=:emp_id").setParameter("empId", empId)
+				.executeUpdate();
+
+		if (roes > 0) {
+			flag = true;
+		}
+
+		return flag;
+	}
+
+	@Override
+	public boolean deleteMultipleEmployeeRecords(EmployeeDto request) {
+		Session session = getCurrentSession();
+		boolean flag = false;
+
+		for (Integer x : request.getEmpIds()) {
+			int rowsAffected = session.createNativeQuery("delete from employee_details where emp_id=:empId")
+					.setParameter("empId", x).executeUpdate();
+
+			if (rowsAffected > 0) {
+				flag = true;
+			}
+		}
+
+		return flag;
+	}
+
 }

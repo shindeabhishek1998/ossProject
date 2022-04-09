@@ -19,4 +19,12 @@ public interface EmpServiceInterface {
 	public EmployeeResponse getEmployeeDetails(EmployeeDto request);
 
 	public EmployeeResponse getEmployeeDetailsByPlantId(EmployeeDto request);
+
+	public EmployeeResponse deleteEmployeeRecord(int empId);
+
+	public EmployeeResponse deleteEmployeeRecordWithCreateNativeQuery(int empId);
+
+	public EmployeeResponse deleteEmployeeRecordWithCreateQuery(int empId);
+
+	public EmployeeResponse deleteMultipleEmployeeRecords(EmployeeDto request);
 }

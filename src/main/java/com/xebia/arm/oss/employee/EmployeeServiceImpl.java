@@ -154,4 +154,86 @@ public class EmployeeServiceImpl implements EmpServiceInterface, OSSConstants {
 		return res;
 	}
 
+	@Override
+	public EmployeeResponse deleteEmployeeRecord(int empId) {
+		EmployeeResponse res = new EmployeeResponse();
+		boolean flag = dao.deleteEmployeeRecord(empId);
+		if (flag) {
+			res.setStatusCode(STATUS_CODE_200);
+			res.setStatus(STATUS_SUCCESS);
+			res.setResult(RESULT_TRUE);
+			res.setMessage("Employee record deleted successfully");
+		} else {
+			res.setStatusCode(STATUS_CODE_200);
+			res.setStatus(STATUS_FAIL);
+			res.setResult(RESULT_FALSE);
+			res.setMessage("unable to delete  employee record");
+		}
+		return res;
+	}
+
+	@Override
+	public EmployeeResponse deleteEmployeeRecordWithCreateNativeQuery(int empId) {
+		EmployeeResponse res = new EmployeeResponse();
+		boolean flag = dao.deleteEmployeeRecordWithCreateNativeQuery(empId);
+		if (flag) {
+			res.setStatusCode(STATUS_CODE_200);
+			res.setStatus(STATUS_SUCCESS);
+			res.setResult(RESULT_TRUE);
+			res.setMessage("Employee record deleted successfully");
+		} else {
+			res.setStatusCode(STATUS_CODE_200);
+			res.setStatus(STATUS_FAIL);
+			res.setResult(RESULT_FALSE);
+			res.setMessage("unable to delete  employee record");
+		}
+		return res;
+	}
+
+	@Override
+	public EmployeeResponse deleteEmployeeRecordWithCreateQuery(int empId) {
+
+		EmployeeResponse res = new EmployeeResponse();
+		boolean flag = dao.deleteEmployeeRecordWithCreateNativeQuery(empId);
+		if (flag) {
+			res.setStatusCode(STATUS_CODE_200);
+			res.setStatus(STATUS_SUCCESS);
+			res.setResult(RESULT_TRUE);
+			res.setMessage("Employee record deleted successfully");
+		} else {
+			res.setStatusCode(STATUS_CODE_200);
+			res.setStatus(STATUS_FAIL);
+			res.setResult(RESULT_FALSE);
+			res.setMessage("unable to delete  employee record");
+		}
+		return res;
+	}
+
+	@Override
+	public EmployeeResponse deleteMultipleEmployeeRecords(EmployeeDto request) {
+		EmployeeResponse res = new EmployeeResponse();
+
+		if (request.getEmpIds() != null && request.getEmpIds().length > 0) {
+			boolean flag = dao.deleteMultipleEmployeeRecords(request);
+			if (flag) {
+				res.setStatusCode(STATUS_CODE_200);
+				res.setStatus(STATUS_SUCCESS);
+				res.setResult(RESULT_TRUE);
+				res.setMessage("Employee record deleted successfully");
+			} else {
+				res.setStatusCode(STATUS_CODE_200);
+				res.setStatus(STATUS_FAIL);
+				res.setResult(RESULT_FALSE);
+				res.setMessage("unable to delete  employee record");
+			}
+		} else {
+			res.setStatusCode(STATUS_CODE_400);
+			res.setStatus(STATUS_FAIL);
+			res.setResult(RESULT_FALSE);
+			res.setMessage("bad request");
+		}
+
+		return res;
+	}
+
 }
