@@ -116,9 +116,9 @@ public class EmployeeServiceImpl implements EmpServiceInterface, OSSConstants {
 	}
 
 	@Override
-	public EmployeeResponse getEmployeeDetails(EmployeeDto request) {
+	public EmployeeResponse getEmployeeDetails() {
 		EmployeeResponse res = new EmployeeResponse();
-		List<EmployeeDto> tempList = dao.getEmployeeDetails(request);
+		List<EmployeeDto> tempList = dao.getEmployeeDetails();
 		if (tempList != null && !tempList.isEmpty()) {
 			res.setStatusCode(STATUS_CODE_200);
 			res.setStatus(STATUS_SUCCESS);
@@ -212,7 +212,6 @@ public class EmployeeServiceImpl implements EmpServiceInterface, OSSConstants {
 	@Override
 	public EmployeeResponse deleteMultipleEmployeeRecords(EmployeeDto request) {
 		EmployeeResponse res = new EmployeeResponse();
-
 		if (request.getEmpIds() != null && request.getEmpIds().length > 0) {
 			boolean flag = dao.deleteMultipleEmployeeRecords(request);
 			if (flag) {
@@ -231,6 +230,30 @@ public class EmployeeServiceImpl implements EmpServiceInterface, OSSConstants {
 			res.setStatus(STATUS_FAIL);
 			res.setResult(RESULT_FALSE);
 			res.setMessage("bad request");
+		}
+
+		return res;
+	}
+
+	/**
+	 * @author Vinay B. Apr 9, 2022 11:37:21 PM
+	 */
+	@Override
+	public EmployeeResponse getEmpDetailsByEmpId(int empId) {
+		EmployeeResponse res = new EmployeeResponse();
+
+		EmployeeDetails ed = dao.getEmpDetailsByEmpId(empId);
+		if (ed != null) {
+			res.setStatusCode(STATUS_CODE_200);
+			res.setStatus(STATUS_SUCCESS);
+			res.setResult(RESULT_TRUE);
+			res.setMessage("Employee record deleted successfully");
+			res.setEmpDetails(ed);
+		} else {
+			res.setStatusCode(STATUS_CODE_200);
+			res.setStatus(STATUS_FAIL);
+			res.setResult(RESULT_FALSE);
+			res.setMessage("unable to delete  employee record");
 		}
 
 		return res;

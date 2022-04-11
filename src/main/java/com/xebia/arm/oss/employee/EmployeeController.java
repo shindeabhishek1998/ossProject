@@ -45,15 +45,20 @@ public class EmployeeController {
 		return res;
 	}
 
+	@GetMapping(value = "/getEmpDetailsByEmpId/{empId}") // api name
+	public EmployeeResponse getEmpDetailsByEmpId(@PathVariable("empId") int empId) { // method name
+		return empService.getEmpDetailsByEmpId(empId);
+	}
+
 	@PostMapping(value = "/updateEmployeeDetails")
 	public EmployeeResponse updateEmployeeDetails(@RequestBody EmployeeDto request) {
 		return empService.updateEmployeeDetails(request);
 
 	}
 
-	@PostMapping(value = "/getEmployeeDetails")
-	public EmployeeResponse getEmployeeDetails(@RequestBody EmployeeDto request) {
-		return empService.getEmployeeDetails(request);
+	@GetMapping(value = "/getEmployeeDetails")
+	public EmployeeResponse getEmployeeDetails() {
+		return empService.getEmployeeDetails();
 	}
 
 	@PostMapping(value = "/getEmployeeDetailsByPlantId")

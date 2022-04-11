@@ -16,7 +16,7 @@ public interface EmpServiceInterface {
 
 	public EmployeeResponse updateEmployeeDetails(EmployeeDto request);
 
-	public EmployeeResponse getEmployeeDetails(EmployeeDto request);
+	public EmployeeResponse getEmployeeDetails();
 
 	public EmployeeResponse getEmployeeDetailsByPlantId(EmployeeDto request);
 
@@ -27,4 +27,6 @@ public interface EmpServiceInterface {
 	public EmployeeResponse deleteEmployeeRecordWithCreateQuery(int empId);
 
 	public EmployeeResponse deleteMultipleEmployeeRecords(EmployeeDto request);
+
+	public EmployeeResponse getEmpDetailsByEmpId(int empId);
 }

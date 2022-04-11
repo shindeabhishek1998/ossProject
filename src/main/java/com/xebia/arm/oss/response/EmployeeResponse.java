@@ -21,6 +21,8 @@ public class EmployeeResponse {
 
 	private List<EmployeeDto> dtoList;
 
+	private EmployeeDetails empDetails;
+
 	public int getStatusCode() {
 		return statusCode;
 	}
@@ -75,6 +77,14 @@ public class EmployeeResponse {
 
 	public void setDtoList(List<EmployeeDto> dtoList) {
 		this.dtoList = dtoList;
+	}
+
+	public EmployeeDetails getEmpDetails() {
+		return empDetails;
+	}
+
+	public void setEmpDetails(EmployeeDetails empDetails) {
+		this.empDetails = empDetails;
 	}
 
 }

@@ -18,7 +18,7 @@ public interface EmployeeDaoInterface {
 
 	public boolean updateEmployeeDetails(EmployeeDto request);
 
-	public List<EmployeeDto> getEmployeeDetails(EmployeeDto request);
+	public List<EmployeeDto> getEmployeeDetails();
 
 	public List<EmployeeDto> getEmployeeDetailsByPlantId(EmployeeDto request);
 
@@ -29,4 +29,6 @@ public interface EmployeeDaoInterface {
 	public boolean deleteEmployeeRecordWithCreateQuery(int empId);
 
 	public boolean deleteMultipleEmployeeRecords(EmployeeDto request);
+
+	public EmployeeDetails getEmpDetailsByEmpId(int empId);
 }

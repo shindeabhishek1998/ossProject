@@ -106,8 +106,9 @@ public class EmployeeDaoImpl extends BaseRepository implements EmployeeDaoInterf
 		return false;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<EmployeeDto> getEmployeeDetails(EmployeeDto request) {
+	public List<EmployeeDto> getEmployeeDetails() {
 		Session session = getCurrentSession();
 
 		List<EmployeeDto> dtoList = new ArrayList<>();
@@ -115,8 +116,7 @@ public class EmployeeDaoImpl extends BaseRepository implements EmployeeDaoInterf
 		// session - createQuery - HQL
 		// Set parameter to the query - .setParameter(position,value);
 
-		List<EmployeeDetails> list = session.createQuery("FROM EmployeeDetails where plantId=:locationId")
-				.setParameter("locationId", request.getPlantId()).getResultList();
+		List<EmployeeDetails> list = session.createQuery("FROM EmployeeDetails").getResultList();
 
 		for (EmployeeDetails x : list) {
 
@@ -241,6 +241,15 @@ public class EmployeeDaoImpl extends BaseRepository implements EmployeeDaoInterf
 		}
 
 		return flag;
+	}
+
+	/**
+	 * @author Vinay B. Apr 9, 2022 11:38:29 PM
+	 */
+	@Override
+	public EmployeeDetails getEmpDetailsByEmpId(int empId) {
+		return (EmployeeDetails) getCurrentSession().createQuery("FROM EmployeeDetails WHERE empId=:empId")
+				.setParameter("empId", empId).getResultList().get(0);
 	}
 
 }
