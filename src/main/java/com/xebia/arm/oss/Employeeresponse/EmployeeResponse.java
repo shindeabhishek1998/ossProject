@@ -1,4 +1,4 @@
-package com.xebia.arm.oss.response;
+package com.xebia.arm.oss.Employeeresponse;
 
 import java.util.List;
 
@@ -6,20 +6,42 @@ import com.xebia.arm.oss.dto.EmployeeDto;
 import com.xebia.arm.oss.model.EmployeeDetails;
 
 public class EmployeeResponse {
-
 	private int statusCode;
 
 	private String status;
 
 	private boolean result;
 
+	private EmployeeDto ed;
+
+	public EmployeeDto getEd() {
+		return ed;
+	}
+
+	public void setEd(EmployeeDto ed) {
+		this.ed = ed;
+	}
+
 	private String message;
-
-	private List<EmployeeDto> userList;
-
 	private List<EmployeeDetails> empList;
-
 	private List<EmployeeDto> dtoList;
+	private List<EmployeeDto> designationWiseEmpCount;
+
+	public List<EmployeeDto> getDesignationWiseEmpCount() {
+		return designationWiseEmpCount;
+	}
+
+	public void setDesignationWiseEmpCount(List<EmployeeDto> designationWiseEmpCount) {
+		this.designationWiseEmpCount = designationWiseEmpCount;
+	}
+
+	public List<EmployeeDto> getDtoList() {
+		return dtoList;
+	}
+
+	public void setDtoList(List<EmployeeDto> dtoList) {
+		this.dtoList = dtoList;
+	}
 
 	public int getStatusCode() {
 		return statusCode;
@@ -53,14 +75,6 @@ public class EmployeeResponse {
 		this.message = message;
 	}
 
-	public List<EmployeeDto> getUserList() {
-		return userList;
-	}
-
-	public void setUserList(List<EmployeeDto> userList) {
-		this.userList = userList;
-	}
-
 	public List<EmployeeDetails> getEmpList() {
 		return empList;
 	}
@@ -69,12 +83,6 @@ public class EmployeeResponse {
 		this.empList = empList;
 	}
 
-	public List<EmployeeDto> getDtoList() {
-		return dtoList;
-	}
-
-	public void setDtoList(List<EmployeeDto> dtoList) {
-		this.dtoList = dtoList;
-	}
+	
 
 }

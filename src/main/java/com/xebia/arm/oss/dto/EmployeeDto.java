@@ -1,11 +1,11 @@
 package com.xebia.arm.oss.dto;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeDto {
-
-	private int id;
+	public int empId;
 
 	public String firstName;
 
@@ -15,28 +15,87 @@ public class EmployeeDto {
 
 	public String email;
 
-	private List<EmployeeDto> empList;
+	public int plantId;
 
-	private String address;
+	public List<EmployeeDto> empList;
 
-	private int plantId;
+	public String designation;
 
-	private int empId;
+	private List<EmployeeDto> dtoList;
 
-	private double salary;
+	private List<EmployeeDto> list;
+
+	private int designationWiseEmpCount;
+
+	private String employeeName;
 
 	private Integer[] empIds;
 
-	/*
-	 * public static void test1() { private List<EmployeeDto> empList = new
-	 * ArrayList<>(); EmployeeDto obj1 = new EmployeeDto();
-	 * obj1.setFirstName("Abhishek"); obj1.setFirstName("SHinde");
-	 * 
-	 * EmployeeDto obj2 = new EmployeeDto(); obj1.setFirstName("Ananta");
-	 * obj1.setFirstName("Kolhe");
-	 * 
-	 * empList.add(obj1); empList.add(obj2); }
-	 */
+	public Integer[] getEmpIds() {
+		return empIds;
+	}
+
+	public void setEmpIds(Integer[] empIds) {
+		this.empIds = empIds;
+	}
+
+	public String getEmployeeName() {
+		return employeeName;
+	}
+
+	public void setEmployeeName(String employeeName) {
+		this.employeeName = employeeName;
+	}
+
+	public int getDesignationWiseEmpCount() {
+		return designationWiseEmpCount;
+	}
+
+	public void setDesignationWiseEmpCount(int designationWiseEmpCount) {
+		this.designationWiseEmpCount = designationWiseEmpCount;
+	}
+
+	public Date dob;
+
+	public List<EmployeeDto> getEmpList() {
+		return empList;
+	}
+
+	public void setEmpList(List<EmployeeDto> empList) {
+		this.empList = empList;
+	}
+
+	public String getDesignation() {
+		return designation;
+	}
+
+	public void setDesignation(String designation) {
+		this.designation = designation;
+	}
+
+	public List<EmployeeDto> getDtoList() {
+		return dtoList;
+	}
+
+	public void setDtoList(List<EmployeeDto> dtoList) {
+		this.dtoList = dtoList;
+	}
+
+	public int getEmpId() {
+		return empId;
+	}
+
+	public List<EmployeeDto> getList() {
+		return list;
+	}
+
+	public void setList(List<EmployeeDto> list) {
+		this.list = list;
+	}
+
+	public void setEmpId(int empId) {
+		this.empId = empId;
+	}
 
 	public String getFirstName() {
 		return firstName;
@@ -70,28 +129,12 @@ public class EmployeeDto {
 		this.email = email;
 	}
 
-	public List<EmployeeDto> getEmpList() {
-		return empList;
+	public Date getDob() {
+		return dob;
 	}
 
-	public void setEmpList(List<EmployeeDto> empList) {
-		this.empList = empList;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
+	public void setDob(Date dob) {
+		this.dob = dob;
 	}
 
 	public int getPlantId() {
@@ -100,30 +143,6 @@ public class EmployeeDto {
 
 	public void setPlantId(int plantId) {
 		this.plantId = plantId;
-	}
-
-	public int getEmpId() {
-		return empId;
-	}
-
-	public void setEmpId(int empId) {
-		this.empId = empId;
-	}
-
-	public double getSalary() {
-		return salary;
-	}
-
-	public void setSalary(double salary) {
-		this.salary = salary;
-	}
-
-	public Integer[] getEmpIds() {
-		return empIds;
-	}
-
-	public void setEmpIds(Integer[] empIds) {
-		this.empIds = empIds;
 	}
 
 }

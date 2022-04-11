@@ -1,19 +1,19 @@
 package com.xebia.arm.oss.model;
 
+import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.Date;
 
-import javax.annotation.Generated;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 public class EmployeeDetails {
@@ -30,11 +30,14 @@ public class EmployeeDetails {
 
 	private String email;
 
+	private String designation;
+
 	@CreationTimestamp
 	@Column(name = "created_date", updatable = false)
 	private Timestamp createDate;
 
-	private String dob;
+	@Column(name = "dob")
+	private Date dob;
 
 	@UpdateTimestamp
 	@Column(name = "updated_date")
@@ -82,12 +85,20 @@ public class EmployeeDetails {
 		this.email = email;
 	}
 
-	public String getDob() {
+	public Date getDob() {
 		return dob;
 	}
 
-	public void setDob(String dob) {
-		this.dob = dob;
+	public void setDob(Date string) {
+		this.dob = string;
+	}
+
+	public String getDesignation() {
+		return designation;
+	}
+
+	public void setDesignation(String designation) {
+		this.designation = designation;
 	}
 
 	public int getPlantId() {
@@ -96,14 +107,6 @@ public class EmployeeDetails {
 
 	public void setPlantId(int plantId) {
 		this.plantId = plantId;
-	}
-
-	public Timestamp getUpdateDate() {
-		return updateDate;
-	}
-
-	public void setUpdateDate(Timestamp updateDate) {
-		this.updateDate = updateDate;
 	}
 
 }

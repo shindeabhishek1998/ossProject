@@ -4,29 +4,33 @@ import java.util.List;
 
 import com.xebia.arm.oss.dto.EmployeeDto;
 import com.xebia.arm.oss.model.EmployeeDetails;
-import com.xebia.arm.oss.response.EmployeeResponse;
 
 public interface EmployeeDaoInterface {
 
-	public boolean firstAPI();
-
 	public boolean addEmployee(EmployeeDto request);
 
-	public boolean addMultipleEmployees(EmployeeDto request);
+	public List<EmployeeDetails> getEmployeeDetails(EmployeeDto request);
 
-	public List<EmployeeDto> getEmployeeDetailsByBranchId(int branchId);
+	public List<EmployeeDto> getEmployeeDetailsByplantId(EmployeeDto request);
 
-	public boolean updateEmployeeDetails(EmployeeDto request);
+	public List<EmployeeDto> getEmployeeDetailsbyempId(int empId);
 
-	public List<EmployeeDto> getEmployeeDetails(EmployeeDto request);
+	public boolean addMultipleEmployeeDetails(EmployeeDto request);
 
-	public List<EmployeeDto> getEmployeeDetailsByPlantId(EmployeeDto request);
+	public List<EmployeeDto> getDesignationWiseEmployeeCount(EmployeeDto request);
 
-	public boolean deleteEmployeeRecord(int empId);
+	public EmployeeDto getSingleEmployeeDetils(EmployeeDto request);
 
-	public boolean deleteEmployeeRecordWithCreateNativeQuery(int empId);
+	public boolean updateEmployee(EmployeeDto request);
 
-	public boolean deleteEmployeeRecordWithCreateQuery(int empId);
+	public List<EmployeeDto> generateEmployeeDOBReport(EmployeeDto request);
 
-	public boolean deleteMultipleEmployeeRecords(EmployeeDto request);
+	public boolean deleteRecordFromEmployeeDetails(int empId);
+
+	public boolean deleterecordwithcreateNativeQuery(int empId);
+
+	public boolean deleteWithCreateQuery(int empId);
+
+	public boolean deleteMultipleEmpoyeeDetails(EmployeeDto request);
+
 }

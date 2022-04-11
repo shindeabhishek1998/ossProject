@@ -1,86 +1,136 @@
 package com.xebia.arm.oss.employee;
 
 import java.util.List;
+import java.util.regex.MatchResult;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.xebia.arm.oss.Employeeresponse.EmployeeResponse;
 import com.xebia.arm.oss.commonUtils.OSSConstants;
 import com.xebia.arm.oss.dto.EmployeeDto;
 import com.xebia.arm.oss.model.EmployeeDetails;
-import com.xebia.arm.oss.response.EmployeeResponse;
 
 @Service
-public class EmployeeServiceImpl implements EmpServiceInterface, OSSConstants {
+public class EmployeeServiceImpl implements EmployeeServiceInterface, OSSConstants {
 
 	@Autowired
 	EmployeeDaoInterface dao;
 
-	@Override
-	public EmployeeResponse firstAPI() {
-		EmployeeResponse res = new EmployeeResponse();
-		boolean flag = dao.firstAPI();
-		if (flag) {
-			res.setStatusCode(STATUS_CODE_200);
-			res.setStatus(STATUS_SUCCESS);
-			res.setResult(RESULT_TRUE);
-			res.setMessage("returning from dao layer with custom resopnse");
-		} else {
-			res.setStatusCode(STATUS_CODE_200);
-			res.setStatus(STATUS_FAIL);
-			res.setResult(RESULT_FALSE);
-			res.setMessage("unable to reach dao layer");
-		}
-		return res;
-	}
-
-	@Override
 	public EmployeeResponse addEmployee(EmployeeDto request) {
-		EmployeeResponse res = new EmployeeResponse();
-		boolean flag = dao.addEmployee(request);
-		if (flag) {
-			res.setStatusCode(STATUS_CODE_200);
-			res.setStatus(STATUS_SUCCESS);
-			res.setResult(RESULT_TRUE);
-			res.setMessage("Employee record added successfully");
+		EmployeeResponse er = new EmployeeResponse();
+		String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
+
+		if (request.getMobile().length() > 0 && request.getMobile().length() < 11
+				&& request.getMobile().length() == 10) {
+			if (request.getEmail() != null) {
+				Pattern pattern = Pattern.compile(regex);
+				MatchResult matcher = pattern.matcher(request.getEmail());
+				if (((java.util.regex.Matcher) matcher).matches()) {
+					boolean flag = dao.addEmployee(request);
+					if (flag) {
+						er.setStatusCode(STATUS_CODE_200);
+						er.setStatus(STATUS_SUCCESS);
+						er.setResult(RESULT_TRUE);
+						er.setMessage("Employee Record added Succesfully");
+					} else {
+						er.setStatusCode(STATUS_CODE_200);
+						er.setStatus(STATUS_FAIL);
+						er.setResult(RESULT_FALSE);
+						er.setMessage("unable to add employee records");
+					}
+				} else {
+					er.setStatusCode(STATUS_CODE_100);
+					er.setStatus(STATUS_FAIL);
+					er.setResult(RESULT_FALSE);
+					er.setMessage("Invalid Email Address");
+				}
+			} else {
+				er.setStatusCode(STATUS_CODE_100);
+				er.setStatus(STATUS_FAIL);
+				er.setResult(RESULT_FALSE);
+				er.setMessage("Invalid Email Address");
+
+			}
+
 		} else {
-			res.setStatusCode(STATUS_CODE_200);
-			res.setStatus(STATUS_FAIL);
-			res.setResult(RESULT_FALSE);
-			res.setMessage("unable to add employee record");
+			er.setStatusCode(STATUS_CODE_100);
+			er.setStatus(STATUS_FAIL);
+			er.setResult(RESULT_FALSE);
+			er.setMessage("Invalid Mobile Number");
 		}
-		return res;
+
+		return er;
 	}
 
-	@Override
-	public EmployeeResponse addMultipleEmployees(EmployeeDto request) {
-		EmployeeResponse res = new EmployeeResponse();
-		boolean flag = dao.addMultipleEmployees(request);
+	public EmployeeResponse updateEmployee(EmployeeDto request) {
+		EmployeeResponse er = new EmployeeResponse();
+		boolean flag = dao.updateEmployee(request);
+
 		if (flag) {
-			res.setStatusCode(STATUS_CODE_200);
-			res.setStatus(STATUS_SUCCESS);
-			res.setResult(RESULT_TRUE);
-			res.setMessage("Employee record added successfully");
+			er.setStatusCode(STATUS_CODE_200);
+			er.setStatus(STATUS_SUCCESS);
+			er.setResult(RESULT_TRUE);
+			er.setMessage("Employee Record Updated Succesfully");
 		} else {
-			res.setStatusCode(STATUS_CODE_200);
-			res.setStatus(STATUS_FAIL);
-			res.setResult(RESULT_FALSE);
-			res.setMessage("unable to add employee record");
+			er.setStatusCode(STATUS_CODE_200);
+			er.setStatus(STATUS_FAIL);
+			er.setResult(RESULT_FALSE);
+			er.setMessage("unable to update an employee records");
 		}
-		return res;
+
+		return er;
 	}
 
-	@Override
-	public EmployeeResponse getEmployeeDetailsByBranchId(int branchId) {
+	public EmployeeResponse getEmployeeDetails(EmployeeDto request) {
+		EmployeeResponse er = new EmployeeResponse();
+		List<EmployeeDetails> tempList = dao.getEmployeeDetails(request);
+		if (tempList != null && !tempList.isEmpty()) {
+			er.setStatusCode(STATUS_CODE_200);
+			er.setStatus(STATUS_SUCCESS);
+			er.setResult(RESULT_TRUE);
+			er.setMessage("Employee record fetched successfully");
+			er.setEmpList(tempList);
+		} else {
+			er.setStatusCode(STATUS_CODE_200);
+			er.setStatus(STATUS_FAIL);
+			er.setResult(RESULT_FALSE);
+			er.setMessage("unable to  fetch employee record");
+		}
+		return er;
+
+	}
+
+	public EmployeeResponse getEmployeeDetailsByplantId(EmployeeDto request) {
+		EmployeeResponse er = new EmployeeResponse();
+		List<EmployeeDto> tempList = dao.getEmployeeDetailsByplantId(request);
+		if (tempList != null && !tempList.isEmpty()) {
+			er.setStatusCode(STATUS_CODE_200);
+			er.setStatus(STATUS_SUCCESS);
+			er.setResult(RESULT_TRUE);
+			er.setMessage("Employee record fetched successfully");
+			er.setDtoList(tempList);
+			;
+		} else {
+			er.setStatusCode(STATUS_CODE_200);
+			er.setStatus(STATUS_FAIL);
+			er.setResult(RESULT_FALSE);
+			er.setMessage("unable to  fetch employee record");
+		}
+		return er;
+	}
+
+	public EmployeeResponse getEmployeeDetailsbyempId(int empId) {
 		EmployeeResponse res = new EmployeeResponse();
-		if (branchId > 0) {
-			List<EmployeeDto> result = dao.getEmployeeDetailsByBranchId(branchId);
+		if (empId > 0) {
+			List<EmployeeDto> result = dao.getEmployeeDetailsbyempId(empId);
 			if (result != null && result.size() > 0) {
 				res.setStatusCode(STATUS_CODE_200);
 				res.setStatus(STATUS_SUCCESS);
 				res.setResult(RESULT_TRUE);
 				res.setMessage("Employee record fetched successfully");
-				res.setUserList(result);
+				res.setDtoList(result);
 			} else {
 				res.setStatusCode(STATUS_CODE_200);
 				res.setStatus(STATUS_FAIL);
@@ -91,149 +141,165 @@ public class EmployeeServiceImpl implements EmpServiceInterface, OSSConstants {
 			res.setStatusCode(STATUS_CODE_200);
 			res.setStatus(STATUS_FAIL);
 			res.setResult(RESULT_FALSE);
-			res.setMessage("bad request / branchId value should be greater than 0");
+			res.setMessage("bad request / empId value should be greater than 0");
 		}
 
 		return res;
 	}
 
-	@Override
-	public EmployeeResponse updateEmployeeDetails(EmployeeDto request) {
-		EmployeeResponse res = new EmployeeResponse();
-		boolean flag = dao.updateEmployeeDetails(request);
+	public EmployeeResponse addMultipleEmployeeDetails(EmployeeDto request) {
+		EmployeeResponse er = new EmployeeResponse();
+		boolean flag = dao.addMultipleEmployeeDetails(request);
 		if (flag) {
-			res.setStatusCode(STATUS_CODE_200);
-			res.setStatus(STATUS_SUCCESS);
-			res.setResult(RESULT_TRUE);
-			res.setMessage("Employee record updated successfully");
+			er.setStatusCode(STATUS_CODE_200);
+			er.setStatus(STATUS_SUCCESS);
+			er.setResult(RESULT_TRUE);
+			er.setMessage("Employee Record added Succesfully");
 		} else {
-			res.setStatusCode(STATUS_CODE_200);
-			res.setStatus(STATUS_FAIL);
-			res.setResult(RESULT_FALSE);
-			res.setMessage("unable to update the employee record");
+			er.setStatusCode(STATUS_CODE_200);
+			er.setStatus(STATUS_FAIL);
+			er.setResult(RESULT_FALSE);
+			er.setMessage("unable to add employee records");
 		}
-		return res;
+		return er;
 	}
 
-	@Override
-	public EmployeeResponse getEmployeeDetails(EmployeeDto request) {
-		EmployeeResponse res = new EmployeeResponse();
-		List<EmployeeDto> tempList = dao.getEmployeeDetails(request);
+	public EmployeeResponse getDesignationWiseEmployeeCount(EmployeeDto request) {
+		EmployeeResponse er = new EmployeeResponse();
+
+		List<EmployeeDto> tempList = dao.getDesignationWiseEmployeeCount(request);
 		if (tempList != null && !tempList.isEmpty()) {
+			er.setStatusCode(STATUS_CODE_200);
+			er.setStatus(STATUS_SUCCESS);
+			er.setResult(RESULT_TRUE);
+			er.setMessage("Employee record fetched with designation count");
+			er.setDtoList(tempList);
+		} else {
+			er.setStatusCode(STATUS_CODE_200);
+			er.setStatus(STATUS_FAIL);
+			er.setResult(RESULT_FALSE);
+			er.setMessage("unable to  fetch employee designation count");
+		}
+		return er;
+	}
+
+	public EmployeeResponse generateEmployeeDOBReport(EmployeeDto request) {
+
+		EmployeeResponse res = new EmployeeResponse();
+		List<EmployeeDto> result = dao.generateEmployeeDOBReport(request);
+		if (result != null && result.size() > 0) {
 			res.setStatusCode(STATUS_CODE_200);
 			res.setStatus(STATUS_SUCCESS);
 			res.setResult(RESULT_TRUE);
-			res.setMessage("Employee record fetched successfully");
-			res.setDtoList(tempList);
+			res.setMessage("Employee DOB report generate  successfully");
+			res.setDtoList(result);
 		} else {
 			res.setStatusCode(STATUS_CODE_200);
 			res.setStatus(STATUS_FAIL);
 			res.setResult(RESULT_FALSE);
-			res.setMessage("unable to add fetch employee record");
+			res.setMessage("unable to generate DOB report");
 		}
+
 		return res;
 	}
 
-	@Override
-	public EmployeeResponse getEmployeeDetailsByPlantId(EmployeeDto request) {
-
-		EmployeeResponse res = new EmployeeResponse();
-		List<EmployeeDto> tempList = dao.getEmployeeDetailsByPlantId(request);
-		if (tempList != null && !tempList.isEmpty()) {
-			res.setStatusCode(STATUS_CODE_200);
-			res.setStatus(STATUS_SUCCESS);
-			res.setResult(RESULT_TRUE);
-			res.setMessage("Employee record fetched successfully");
-			res.setDtoList(tempList);
+	public EmployeeResponse getSingleEmployeeDetils(EmployeeDto request) {
+		EmployeeResponse er = new EmployeeResponse();
+		EmployeeDto ed = dao.getSingleEmployeeDetils(request);
+		if (ed != null) {
+			er.setStatusCode(STATUS_CODE_200);
+			er.setStatus(STATUS_SUCCESS);
+			er.setResult(RESULT_TRUE);
+			er.setMessage("Employee record fetched");
+			er.setEd(ed);
 		} else {
-			res.setStatusCode(STATUS_CODE_200);
-			res.setStatus(STATUS_FAIL);
-			res.setResult(RESULT_FALSE);
-			res.setMessage("unable to add fetch employee record");
+			er.setStatusCode(STATUS_CODE_200);
+			er.setStatus(STATUS_FAIL);
+			er.setResult(RESULT_FALSE);
+			er.setMessage("unable to  fetch employee record");
 		}
-		return res;
+		return er;
 	}
 
 	@Override
-	public EmployeeResponse deleteEmployeeRecord(int empId) {
-		EmployeeResponse res = new EmployeeResponse();
-		boolean flag = dao.deleteEmployeeRecord(empId);
+	public EmployeeResponse deleteRecordFromEmployeeDetails(int empId) {
+		EmployeeResponse er = new EmployeeResponse();
+		boolean flag = dao.deleteRecordFromEmployeeDetails(empId);
 		if (flag) {
-			res.setStatusCode(STATUS_CODE_200);
-			res.setStatus(STATUS_SUCCESS);
-			res.setResult(RESULT_TRUE);
-			res.setMessage("Employee record deleted successfully");
+			er.setStatusCode(STATUS_CODE_200);
+			er.setStatus(STATUS_SUCCESS);
+			er.setResult(RESULT_TRUE);
+			er.setMessage("Employee record deleted");
+
 		} else {
-			res.setStatusCode(STATUS_CODE_200);
-			res.setStatus(STATUS_FAIL);
-			res.setResult(RESULT_FALSE);
-			res.setMessage("unable to delete  employee record");
+			er.setStatusCode(STATUS_CODE_200);
+			er.setStatus(STATUS_FAIL);
+			er.setResult(RESULT_FALSE);
+			er.setMessage("unable to  delete employee record");
 		}
-		return res;
+		return er;
+
 	}
 
 	@Override
-	public EmployeeResponse deleteEmployeeRecordWithCreateNativeQuery(int empId) {
-		EmployeeResponse res = new EmployeeResponse();
-		boolean flag = dao.deleteEmployeeRecordWithCreateNativeQuery(empId);
+	public EmployeeResponse deleterecordwithcreateNativeQuery(int empId) {
+		EmployeeResponse er = new EmployeeResponse();
+		boolean flag = dao.deleterecordwithcreateNativeQuery(empId);
 		if (flag) {
-			res.setStatusCode(STATUS_CODE_200);
-			res.setStatus(STATUS_SUCCESS);
-			res.setResult(RESULT_TRUE);
-			res.setMessage("Employee record deleted successfully");
+			er.setStatusCode(STATUS_CODE_200);
+			er.setStatus(STATUS_SUCCESS);
+			er.setResult(RESULT_TRUE);
+			er.setMessage("Employee record deleted");
 		} else {
-			res.setStatusCode(STATUS_CODE_200);
-			res.setStatus(STATUS_FAIL);
-			res.setResult(RESULT_FALSE);
-			res.setMessage("unable to delete  employee record");
+			er.setStatusCode(STATUS_CODE_200);
+			er.setStatus(STATUS_FAIL);
+			er.setResult(RESULT_FALSE);
+			er.setMessage("unable to  delete employee record");
 		}
-		return res;
+		return er;
 	}
 
 	@Override
-	public EmployeeResponse deleteEmployeeRecordWithCreateQuery(int empId) {
-
-		EmployeeResponse res = new EmployeeResponse();
-		boolean flag = dao.deleteEmployeeRecordWithCreateNativeQuery(empId);
+	public EmployeeResponse deleteWithCreateQuery(int empId) {
+		EmployeeResponse er = new EmployeeResponse();
+		boolean flag = dao.deleteWithCreateQuery(empId);
 		if (flag) {
-			res.setStatusCode(STATUS_CODE_200);
-			res.setStatus(STATUS_SUCCESS);
-			res.setResult(RESULT_TRUE);
-			res.setMessage("Employee record deleted successfully");
+			er.setStatusCode(STATUS_CODE_200);
+			er.setStatus(STATUS_SUCCESS);
+			er.setResult(RESULT_TRUE);
+			er.setMessage("  deleted employee record Successfully");
 		} else {
-			res.setStatusCode(STATUS_CODE_200);
-			res.setStatus(STATUS_FAIL);
-			res.setResult(RESULT_FALSE);
-			res.setMessage("unable to delete  employee record");
+			er.setStatusCode(STATUS_CODE_200);
+			er.setStatus(STATUS_FAIL);
+			er.setResult(RESULT_FALSE);
+			er.setMessage("unable record deleted");
 		}
-		return res;
+		return er;
 	}
 
 	@Override
-	public EmployeeResponse deleteMultipleEmployeeRecords(EmployeeDto request) {
-		EmployeeResponse res = new EmployeeResponse();
-
+	public EmployeeResponse deleteMultipleEmpoyeeDetails(EmployeeDto request) {
+		EmployeeResponse er = new EmployeeResponse();
 		if (request.getEmpIds() != null && request.getEmpIds().length > 0) {
-			boolean flag = dao.deleteMultipleEmployeeRecords(request);
+			boolean flag = dao.deleteMultipleEmpoyeeDetails(request);
 			if (flag) {
-				res.setStatusCode(STATUS_CODE_200);
-				res.setStatus(STATUS_SUCCESS);
-				res.setResult(RESULT_TRUE);
-				res.setMessage("Employee record deleted successfully");
+				er.setStatusCode(STATUS_CODE_200);
+				er.setStatus(STATUS_SUCCESS);
+				er.setResult(RESULT_TRUE);
+				er.setMessage("  deleted employee record Successfully");
 			} else {
-				res.setStatusCode(STATUS_CODE_200);
-				res.setStatus(STATUS_FAIL);
-				res.setResult(RESULT_FALSE);
-				res.setMessage("unable to delete  employee record");
+				er.setStatusCode(STATUS_CODE_200);
+				er.setStatus(STATUS_FAIL);
+				er.setResult(RESULT_FALSE);
+				er.setMessage("unable record deleted");
 			}
 		} else {
-			res.setStatusCode(STATUS_CODE_400);
-			res.setStatus(STATUS_FAIL);
-			res.setResult(RESULT_FALSE);
-			res.setMessage("bad request");
+			er.setStatusCode(STATUS_CODE_200);
+			er.setStatus(STATUS_FAIL);
+			er.setResult(RESULT_FALSE);
+			er.setMessage("bad request / empId should be greater than 0");
 		}
-
-		return res;
+		return null;
 	}
 
 }

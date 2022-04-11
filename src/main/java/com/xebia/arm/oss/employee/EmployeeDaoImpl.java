@@ -1,8 +1,10 @@
 package com.xebia.arm.oss.employee;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
 import org.hibernate.Session;
@@ -11,200 +13,302 @@ import org.springframework.stereotype.Component;
 import com.xebia.arm.oss.commonUtils.BaseRepository;
 import com.xebia.arm.oss.dto.EmployeeDto;
 import com.xebia.arm.oss.model.EmployeeDetails;
+import com.xebia.arm.oss.model.PlantDetails;
 
 @Component
 @Transactional
 public class EmployeeDaoImpl extends BaseRepository implements EmployeeDaoInterface {
 
-	@Override
-	public boolean firstAPI() {
-		return true;
-	}
-
-	@Override
 	public boolean addEmployee(EmployeeDto request) {
 		boolean flag = false;
 		Session session = getCurrentSession();
+		try {
+			PlantDetails cf = session.get(PlantDetails.class, request.getPlantId());
+			System.out.println("Plant ID get Called called");
+			if (cf != null) {
+				System.out.println("Plant  ID= " + cf.getPlantId());
+				System.out.println("Plant ID Get Details:: " + cf);
 
-		// EmployeeDto request -> Data Transfer Object
+				EmployeeDetails ed = new EmployeeDetails();
 
-		EmployeeDetails ed = new EmployeeDetails(); // Entity - represents database table
-		// null
+				if (request.getEmpId() > 0) {
+					ed.setEmpId(request.getEmpId());
+				}
+				if (request.getFirstName() != null) {
+					ed.setFirstName(request.getFirstName());
+				}
+				if (request.getLastName() != null) {
+					ed.setLastName(request.getLastName());
+				}
+				if (request.getMobile() != null) {
+					ed.setMobile(request.getMobile());
+				}
 
-		/*
-		 * if (request.getFirstName() != null) {
-		 * ed.setFirstName(request.getFirstName()); }
-		 * 
-		 * if (request.getLastName() != null) { ed.setLastName(request.getLastName()); }
-		 * if (request.getMobile() > 0) { ed.setMobileNumber(request.getMobile()); }
-		 * ed.setAddress(request.getAddress());
-		 * 
-		 * session.save(ed);
-		 */
-		flag = true;
-		return flag;
-	}
+				ed.setEmail(request.getEmail());
+				if (request.getDob() != null) {
+					ed.setDob(request.getDob());
+				}
+				ed.setPlantId(request.getPlantId());
+				session.save(ed);
+				flag = true;
+			} else {
+				System.out.println("Invalid plant Id");
+			}
+		} catch (EntityNotFoundException ex) {
+			System.out.println("Invalid Plant ID");
 
-	@Override
-	public boolean addMultipleEmployees(EmployeeDto request) {
-		boolean flag = false;
-
-		int count = 1;
-		for (EmployeeDto x : request.getEmpList()) {
-			System.out.println("Printing object number - " + count);
-			System.out.println(x.getFirstName());
-			System.out.println(x.getLastName());
-			System.out.println(x.getEmail());
-			System.out.println(x.getMobile());
-			count++;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		flag = true;
 		return flag;
 	}
 
-	@Override
-	public List<EmployeeDto> getEmployeeDetailsByBranchId(int branchId) {
+	public boolean updateEmployee(EmployeeDto request) {
+		boolean flag = false;
+		Session session = getCurrentSession();
+		EmployeeDetails ed = session.get(EmployeeDetails.class, request.getEmpId());
 
-		List<EmployeeDto> empList = new ArrayList<>();
+		System.out.println("Employee firstName before update=" + ed.getFirstName());
+		System.out.println("Employee lastName before update=" + ed.getLastName());
+		System.out.println("Employee email before update=" + ed.getEmail());
+		System.out.println("Employee dob before update=" + ed.getDob());
+		System.out.println("Employee mobile before update=" + ed.getMobile());
 
-		EmployeeDto obj1 = new EmployeeDto();
-		obj1.setFirstName("Abhishek");
-		obj1.setFirstName("SHinde");
-		obj1.setEmail("abhishek@gmail.com");
-		empList.add(obj1);
+		if (ed != null) {
+			if (request.getFirstName() != null) {
+				ed.setFirstName(request.getFirstName());
+			}
+			if (request.getMobile() != null) {
+				ed.setMobile(request.getMobile());
+			}
+			if (request.getLastName() != null) {
+				ed.setLastName(request.getLastName());
+			}
+			if (request.getEmail() != null) {
+				ed.setEmail(request.getEmail());
+			}
+			if (request.getDob() != null) {
+				ed.setDob(request.getDob());
+			}
 
-		EmployeeDto obj2 = new EmployeeDto();
-		obj2.setFirstName("Ananta");
-		obj2.setFirstName("Kolhe");
-		obj2.setEmail("ananta@gmail.com");
-		empList.add(obj2);
+			session.update(ed);
+		}
 
-		return empList;
+		System.out.println("Employee firstName after update=" + ed.getFirstName());
+		System.out.println("Employee lastName after update=" + ed.getLastName());
+		System.out.println("Employee email after update=" + ed.getEmail());
+		System.out.println("Employee dob after update=" + ed.getDob());
+		System.out.println("Employee mobile after update=" + ed.getMobile());
+		flag = true;
+
+		return flag;
 	}
 
-	@Override
-	public boolean updateEmployeeDetails(EmployeeDto request) {
+	public List<EmployeeDetails> getEmployeeDetails(EmployeeDto request) {
+
 		Session session = getCurrentSession();
-
-		// Session - GET // Param - ID (Parimary Key)
-
-		/*
-		 * EmployeeDetails ed = session.get(EmployeeDetails.class, request.getId());
-		 * 
-		 * System.out.println("Employee Address before update - " + ed.getAddress());
-		 * 
-		 * if (request.getAddress() != null) { ed.setAddress(request.getAddress()); }
-		 * 
-		 * session.update(ed);
-		 * 
-		 * System.out.println("Employee First Name - " + ed.getFirstName());
-		 * System.out.println("Employee Last Name - " + ed.getLastName());
-		 * System.out.println("Employee Address after update - " + ed.getAddress());
-		 * System.out.println("Employee Id - " + ed.getId());
-		 */
-
-		return false;
-	}
-
-	@Override
-	public List<EmployeeDto> getEmployeeDetails(EmployeeDto request) {
-		Session session = getCurrentSession();
-
-		List<EmployeeDto> dtoList = new ArrayList<>();
-
-		// session - createQuery - HQL
-		// Set parameter to the query - .setParameter(position,value);
-
 		List<EmployeeDetails> list = session.createQuery("FROM EmployeeDetails where plantId=:locationId")
 				.setParameter("locationId", request.getPlantId()).getResultList();
+		return list;
 
-		for (EmployeeDetails x : list) {
+	}
 
-			EmployeeDto dto = new EmployeeDto();
-			dto.setEmpId(x.getEmpId());
-			dto.setFirstName(x.getFirstName());
-			dto.setLastName(x.getLastName());
-			dtoList.add(dto);
-
+	public List<EmployeeDto> getEmployeeDetailsByplantId(EmployeeDto request) {
+		Session session = getCurrentSession();
+		List<EmployeeDto> dtoList = new ArrayList<>();
+		List<Object[]> objectList = session.createNativeQuery(
+				"select first_name,last_name,email,mobile,emp_id from employee_details WHERE plant_id=:locationId")
+				.setParameter("locationId", request.getPlantId()).getResultList();
+		for (Object[] x : objectList) {
+			EmployeeDto ed = new EmployeeDto();
+			if (x[0] != null) {
+				String firstName = x[0].toString();
+				ed.setFirstName(firstName);
+			}
+			if (x[1] != null) {
+				String lastName = x[1].toString();
+				ed.setLastName(lastName);
+			}
+			if (x[2] != null) {
+				String email = x[2].toString();
+				ed.setEmail(email);
+			}
+			if (x[3] != null) {
+				String mobile = x[3].toString();
+				ed.setMobile(mobile);
+			}
+			if (x[4] != null) {
+				int empId = Integer.parseInt(String.valueOf(x[4]));
+				ed.setEmpId(0);
+			}
+			dtoList.add(ed);
 		}
 
-		// session - createNativeQuery - Database specific query
+		return dtoList;
 
+	}
+
+	public List<EmployeeDto> getEmployeeDetailsbyempId(int empId) {
+		Session session = getCurrentSession();
+		List<EmployeeDto> list = session.createQuery("FROM EmployeeDetails where emp_id=:employeeId")
+				.setParameter("employeeId", empId).getResultList();
+		return list;
+
+	}
+
+	public boolean addMultipleEmployeeDetails(EmployeeDto request) {
+		boolean flag = false;
+		Session session = getCurrentSession();
+		for (EmployeeDto x : request.getEmpList()) {
+			EmployeeDetails ed = new EmployeeDetails();
+
+			if (x.getFirstName() != null) {
+				ed.setFirstName(x.getFirstName());
+			}
+			if (x.getLastName() != null) {
+				ed.setLastName(x.getLastName());
+			}
+			if (x.getMobile() != null) {
+				ed.setMobile(x.getMobile());
+			}
+			if (x.getEmail() != null) {
+				ed.setEmail(x.getEmail());
+			}
+
+			if (x.getDob() != null) {
+				ed.setDob(x.getDob());
+			}
+			if (x.getPlantId() > 0) {
+				ed.setPlantId(x.getPlantId());
+			}
+			if (x.getDob() != null) {
+				ed.setDob(x.getDob());
+			}
+			if (x.getDesignation() != null) {
+				ed.setDesignation(x.getDesignation());
+			}
+			session.save(ed);
+		}
+
+		flag = true;
+		return flag;
+
+	}
+
+	public List<EmployeeDto> getDesignationWiseEmployeeCount(EmployeeDto request) {
+
+		Session session = getCurrentSession();
+		List<EmployeeDto> dtoList = new ArrayList<>();
+		List<Object[]> objectList = session.createNativeQuery(
+				"SELECT  designation, COUNT(*) FROM hrms_db.employee_details  where plant_id=:locationId GROUP BY designation")
+				.setParameter("locationId", request.getPlantId()).getResultList();
+		for (Object[] x : objectList) {
+			EmployeeDto ed = new EmployeeDto();
+
+			if (x[0] != null) {
+				System.out.println(x[1].toString());
+				String designation = x[1].toString();
+				ed.setDesignation(designation);
+			}
+			if (x[1] != null) {
+				System.out.println((String.valueOf(x[2])));
+				int designationWiseEmpCount = Integer.parseInt(String.valueOf(x[2]));
+				ed.setDesignationWiseEmpCount(designationWiseEmpCount);
+
+			}
+			dtoList.add(ed);
+
+		}
 		return dtoList;
 	}
 
-	@Override
-	public List<EmployeeDto> getEmployeeDetailsByPlantId(EmployeeDto request) {
+	public EmployeeDto getSingleEmployeeDetils(EmployeeDto request) {
 		Session session = getCurrentSession();
-
-		List<EmployeeDto> dtoList = new ArrayList<>();
-
-		// session - createNativeQuery - Database specific query
-
-		List<Object[]> objectList = session
-				.createNativeQuery(
-						"select first_name,last_name,email,mobile,emp_id from employee_details where plant_id=:locId")
-				.setParameter("locId", request.getPlantId()).getResultList();
-
+		List<Object[]> objectList = session.createNativeQuery(
+				"SELECT emp_id,first_name,last_name,dob from employee_details where emp_id=:employeeId AND plant_id=:locatioId "
+						+ " AND designation=:designations")
+				.setParameter("employeeId", request.getEmpId()).setParameter("locatioId", request.getPlantId())
+				.setParameter("designations", request.getDesignation()).getResultList();
+		EmployeeDto ed = new EmployeeDto();
 		for (Object[] x : objectList) {
-			EmployeeDto dto = new EmployeeDto();
 
 			if (x[0] != null) {
-				String firstName = x[0].toString();
-				dto.setFirstName(firstName);
+				System.out.println((String.valueOf(x[0])));
+				int empId = Integer.parseInt(String.valueOf(x[0]));
+				ed.setEmpId(empId);
 			}
-
 			if (x[1] != null) {
-				String lastName = x[1].toString();
-				dto.setLastName(lastName);
+				System.out.println(x[1].toString());
+				String firstName = x[1].toString();
+				ed.setFirstName(firstName);
 			}
-
 			if (x[2] != null) {
-				String email = x[2].toString();
-				dto.setEmail(email);
+				System.out.println(x[2].toString());
+				String lastName = x[2].toString();
+				ed.setLastName(lastName);
+
 			}
 
 			if (x[3] != null) {
-				String mobile = x[3].toString();
-				dto.setMobile(mobile);
+				System.out.println((String.valueOf(x[3])));
+				Date dob = Date.valueOf(x[3].toString());
+				ed.setDob(dob);
 			}
-
-			if (x[4] != null) {
-				int empId = Integer.parseInt(String.valueOf(x[4]));
-				dto.setEmpId(empId);
-			}
-
-			dtoList.add(dto);
 		}
+		return ed;
+	}
 
+	public List<EmployeeDto> generateEmployeeDOBReport(EmployeeDto request) {
+		Session session = getCurrentSession();
+		List<EmployeeDto> dtoList = new ArrayList<>();
+		@SuppressWarnings("unchecked")
+		List<Object[]> objectList = session.createNativeQuery(
+				"select emp_id,concat(first_name, ' ' ,last_name) as employeename,dob from hrms_db.employee_details where plant_id=:locId")
+				.setParameter("locId", request.getPlantId()).getResultList();
+		for (Object[] x : objectList) {
+			EmployeeDto ed = new EmployeeDto();
+			if (x[0] != null) {
+				System.out.println((String.valueOf(x[0])));
+				int empId = Integer.parseInt(String.valueOf(x[0]));
+				ed.setEmpId(empId);
+			}
+			if (x[1] != null) {
+				System.out.println(x[1].toString());
+				String employeeName = x[1].toString();
+				ed.setEmployeeName(employeeName);
+			}
+			if (x[2] != null) {
+				System.out.println((String.valueOf(x[2])));
+				Date dob = Date.valueOf(x[2].toString());
+				ed.setDob(dob);
+
+			}
+			dtoList.add(ed);
+
+		}
 		return dtoList;
 	}
 
 	@Override
-	public boolean deleteEmployeeRecord(int empId) {
+	public boolean deleteRecordFromEmployeeDetails(int empId) {
 		Session session = getCurrentSession();
 		boolean flag = false;
-		// Entity - Employee Details
 
 		EmployeeDetails ed = session.load(EmployeeDetails.class, empId);
 		if (ed != null) {
 			session.delete(ed);
 			flag = true;
 		}
-
 		return flag;
 	}
 
 	@Override
-	public boolean deleteEmployeeRecordWithCreateNativeQuery(int empId) {
+	public boolean deleterecordwithcreateNativeQuery(int empId) {
 		Session session = getCurrentSession();
 		boolean flag = false;
-		// Entity - Employee Details
-
-		int rowsAffected = session.createNativeQuery("delete from employee_details where emp_id=:empId")
+		int result = session.createNativeQuery("delete from employee_details where emp_id=:empId")
 				.setParameter("empId", empId).executeUpdate();
-
-		if (rowsAffected > 0) {
+		if (result > 0) {
 			flag = true;
 		}
 
@@ -212,12 +316,12 @@ public class EmployeeDaoImpl extends BaseRepository implements EmployeeDaoInterf
 	}
 
 	@Override
-	public boolean deleteEmployeeRecordWithCreateQuery(int empId) {
+	public boolean deleteWithCreateQuery(int empId) {
 		Session session = getCurrentSession();
 		boolean flag = false;
 
-		int roes = session.createQuery("FROM EmployeeDetails where empId=:emp_id").setParameter("empId", empId)
-				.executeUpdate();
+		int roes = session.createQuery("delete FROM EmployeeDetails where empId=:employeeId")
+				.setParameter("employeeId", empId).executeUpdate();
 
 		if (roes > 0) {
 			flag = true;
@@ -227,20 +331,18 @@ public class EmployeeDaoImpl extends BaseRepository implements EmployeeDaoInterf
 	}
 
 	@Override
-	public boolean deleteMultipleEmployeeRecords(EmployeeDto request) {
+	public boolean deleteMultipleEmpoyeeDetails(EmployeeDto request) {
 		Session session = getCurrentSession();
 		boolean flag = false;
-
 		for (Integer x : request.getEmpIds()) {
-			int rowsAffected = session.createNativeQuery("delete from employee_details where emp_id=:empId")
+			int resultset = session.createNativeQuery("delete from employee_details where emp_id=:empId")
 					.setParameter("empId", x).executeUpdate();
-
-			if (rowsAffected > 0) {
+			if (resultset > 0) {
 				flag = true;
 			}
+
 		}
-
 		return flag;
-	}
 
+	}
 }
