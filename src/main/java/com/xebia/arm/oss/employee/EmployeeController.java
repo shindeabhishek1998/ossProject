@@ -10,81 +10,92 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.xebia.arm.oss.Employeeresponse.EmployeeResponse;
 import com.xebia.arm.oss.dto.EmployeeDto;
-import com.xebia.arm.oss.response.EmployeeResponse;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value = "/employee")
+@RequestMapping(value = "employee")
 public class EmployeeController {
-
 	@Autowired
-	EmpServiceInterface empService;
+	EmployeeServiceInterface employee;
+	
 
-	@GetMapping(value = "/firstAPI/{empId}") // api name
-	public EmployeeResponse firstAPI(@PathVariable("empId") int empId) { // method name
-		EmployeeResponse res = empService.firstAPI();
-		return res;
-	}
-
-	@PostMapping(value = "/addEmployee")
+	@PostMapping(value = "addEmployee")
 	public EmployeeResponse addEmployee(@RequestBody EmployeeDto request) {
-		return empService.addEmployee(request);
+		return employee.addEmployee(request);
 
 	}
 
-	@PostMapping(value = "/addMultipleEmployees")
-	public EmployeeResponse addMultipleEmployees(@RequestBody EmployeeDto request) {
-		return empService.addMultipleEmployees(request);
+	@PostMapping(value = "updateEmployee")
+	public EmployeeResponse updateEmployee(@RequestBody EmployeeDto request) {
+		return employee.updateEmployee(request);
 
 	}
 
-	@GetMapping(value = "/getEmployeeDetailsByBranchId/{branchId}") // api name
-	public EmployeeResponse getEmployeeDetailsByBranchId(@PathVariable("branchId") int branchId) { // method name
-		EmployeeResponse res = empService.getEmployeeDetailsByBranchId(branchId);
-		return res;
+	@PostMapping(value = "getEmployeeDetails")
+	public EmployeeResponse getEmployeeDetails(@RequestBody EmployeeDto request) {
+		return employee.getEmployeeDetails(request);
 	}
 
-	@GetMapping(value = "/getEmpDetailsByEmpId/{empId}") // api name
-	public EmployeeResponse getEmpDetailsByEmpId(@PathVariable("empId") int empId) { // method name
-		return empService.getEmpDetailsByEmpId(empId);
+	/*
+	 * @GetMapping(value = "/getEmpDetailsByEmpId/{empId}") // api name public
+	 * EmployeeResponse getEmpDetailsByEmpId(@PathVariable("empId") int empId) { //
+	 * method name return empService.getEmpDetailsByEmpId(empId); }
+	 * 
+	 * @PostMapping(value = "/updateEmployeeDetails") public EmployeeResponse
+	 * updateEmployeeDetails(@RequestBody EmployeeDto request) { return
+	 * empService.updateEmployeeDetails(request);
+	 * 
+	 * }
+	 * 
+	 * @GetMapping(value = "/getEmployeeDetails") public EmployeeResponse
+	 * getEmployeeDetails() { return empService.getEmployeeDetails(); }
+	 */
+
+	@PostMapping(value = "getEmployeeDetailsByplantId")
+	public EmployeeResponse getEmployeeDetailsByplantId(@RequestBody EmployeeDto request) {
+		return employee.getEmployeeDetailsByplantId(request);
 	}
 
-	@PostMapping(value = "/updateEmployeeDetails")
-	public EmployeeResponse updateEmployeeDetails(@RequestBody EmployeeDto request) {
-		return empService.updateEmployeeDetails(request);
-
+	@PostMapping(value = "addMultipleEmployeeDetails")
+	public EmployeeResponse addMultipleEmployeeDetails(@RequestBody EmployeeDto request) {
+		return employee.addMultipleEmployeeDetails(request);
 	}
 
-	@GetMapping(value = "/getEmployeeDetails")
-	public EmployeeResponse getEmployeeDetails() {
-		return empService.getEmployeeDetails();
+	@PostMapping(value = "getDesignationWiseEmployeeCount")
+	public EmployeeResponse getDesignationWiseEmployeeCount(@RequestBody EmployeeDto request) {
+		return employee.getDesignationWiseEmployeeCount(request);
 	}
 
-	@PostMapping(value = "/getEmployeeDetailsByPlantId")
-	public EmployeeResponse getEmployeeDetailsByPlantId(@RequestBody EmployeeDto request) {
-		return empService.getEmployeeDetailsByPlantId(request);
+	@PostMapping(value = "generateEmployeeDOBReport")
+	public EmployeeResponse generateEmployeeDOBReport(@RequestBody EmployeeDto request) {
+		return employee.generateEmployeeDOBReport(request);
 	}
 
-	@DeleteMapping(value = "/deleteEmployeeRecord/{empId}")
-	public EmployeeResponse deleteEmployeeRecord(@PathVariable("empId") int empId) {
-		return empService.deleteEmployeeRecord(empId);
+	@PostMapping(value = "getSingleEmployeeDetils")
+	public EmployeeResponse getSingleEmployeeDetils(@RequestBody EmployeeDto request) {
+		return employee.getSingleEmployeeDetils(request);
 	}
 
-	@DeleteMapping(value = "/deleteEmployeeRecordWithCreateNativeQuery/{empId}")
-	public EmployeeResponse deleteEmployeeRecordWithCreateNativeQuery(@PathVariable("empId") int empId) {
-		return empService.deleteEmployeeRecordWithCreateNativeQuery(empId);
+	@DeleteMapping(value = "deleteRecordFromEmployeeDetails/{empId}")
+	public EmployeeResponse deleteRecordFromEmployeeDetails(@PathVariable("empId") int empId) {
+		return employee.deleteRecordFromEmployeeDetails(empId);
 	}
 
-	@DeleteMapping(value = "/deleteEmployeeRecordWithCreateQuery/{empId}")
-	public EmployeeResponse deleteEmployeeRecordWithCreateQuery(@PathVariable("empId") int empId) {
-		return empService.deleteEmployeeRecordWithCreateQuery(empId);
-
+	@DeleteMapping(value = "deleterecordwithcreateNativeQuery/{empId}")
+	public EmployeeResponse deleterecordwithcreateNativeQuery(@PathVariable("empId") int empId) {
+		return employee.deleterecordwithcreateNativeQuery(empId);
 	}
 
-	@PostMapping(value = "/deleteMultipleEmployeeRecords")
-	public EmployeeResponse deleteMultipleEmployeeRecords(@RequestBody EmployeeDto request) {
-		return empService.deleteMultipleEmployeeRecords(request);
-
+	@DeleteMapping(value = "deleteWithCreateQuery/{empId}")
+	public EmployeeResponse deleteWithCreateQuery(@PathVariable("empId") int empId) {
+		return employee.deleteWithCreateQuery(empId);
 	}
+
+	@PostMapping(value = "deleteMultipleEmpoyeeDetails")
+	public EmployeeResponse deleteMultipleEmpoyeeDetails(@RequestBody EmployeeDto request) {
+		return employee.deleteMultipleEmpoyeeDetails(request);
+	}
+
 }

@@ -1,8 +1,8 @@
 package com.xebia.arm.oss.employee;
 
+import com.xebia.arm.oss.Employeeresponse.EmployeeResponse;
 import com.xebia.arm.oss.dto.EmployeeDto;
 import com.xebia.arm.oss.model.EmployeeDetails;
-import com.xebia.arm.oss.response.EmployeeResponse;
 
 public interface EmpServiceInterface {
 

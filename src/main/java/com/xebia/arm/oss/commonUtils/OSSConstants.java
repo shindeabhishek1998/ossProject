@@ -8,6 +8,6 @@ public interface OSSConstants {
 	public static boolean RESULT_TRUE = true;
 	public static boolean RESULT_FALSE = false;
 	public static int STATUS_CODE_400 = 400;
-	
+	public static final int STATUS_CODE_100 = 100;
 
 }
